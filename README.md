@@ -32,16 +32,10 @@ The application follows a standard Client-Server architecture:
   - `Footer` (Application Footer)
 
 ## Technical Design Decisions
+- **Database Decision (Why MongoDB?)**: Document databases map natively to JavaScript and JSON, keeping the frontend JSON structure identical to backend storage. The native `mongodb` integration provides speed and simplicity for an application of this scale.
 - **Decoupled Frontend and Backend**: Maintains a clean separation of concerns, allowing standalone scaling and easier maintenance.
 - **Local State Management**: Uses React hooks (`useState`, `useEffect`) directly in the `Manager` component as the state complexity is relatively low.
 - **Optimistic UI Updates**: In some cases, the Local State is updated concurrently with network calls, keeping the interface feeling snappy and responsive for the user.
-
-## Why Supabase? (Database Decision)
-**Note:** This actual project uses **MongoDB** as part of a classic MERN (MongoDB, Express, React, Node) stack rather than Supabase.
-- **Why MongoDB?** Document databases map extremely well natively to JavaScript and JSON, keeping the frontend structure identical to backend storage. The integration through `mongodb` allows for rapid iteration and simple querying for an application of this scale.
-
-## Why Gemini 2.0 Flash?
-**Note:** There is currently **no** Gemini 2.0 Flash or AI integration in the PassOp application. It focuses purely on secure and responsive password storage and retrieval.
 
 ## Database Schema
 The MongoDB database contains a single collection named `passwords`.
@@ -50,12 +44,6 @@ Each document follows this schema:
 - `site` (String): The URL or name of the site.
 - `username` (String): The user's login ID or username.
 - `password` (String): The user's password.
-
-## Template Engine
-This project does **not** rely on a server-side template engine (like EJS or Pug). It operates as a Single Page Application (SPA) using **React**, where the DOM is dynamically updated client-side by Vite and React's reconciliation engine.
-
-## AI Integration
-There is zero AI Integration in this application at this time. It functions via deterministic, explicit user operations without using Large Language Models or specialized AI inference.
 
 ## Folder Structure
 ```
