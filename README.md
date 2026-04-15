@@ -23,6 +23,23 @@ The application follows a standard Client-Server architecture:
 2. **Saving Passwords**: When a user fills the form and clicks "Save", a POST request is sent to the backend with the password data. The backend inserts the data into MongoDB.
 3. **Deleting Passwords**: When a user deletes a password, a DELETE request is sent with the target `id`. The backend deletes the corresponding document from the database.
 
+## API Endpoints
+The Express backend provides the following RESTful endpoints (running on `http://localhost:3000`):
+
+- **`GET /`**
+  - **Description**: Retrieves all saved passwords.
+  - **Response**: JSON array of password objects.
+
+- **`POST /`**
+  - **Description**: Saves a new password entry.
+  - **Body**: JSON object containing `id`, `site`, `username`, and `password`.
+  - **Response**: `{ success: true, result: [...] }`
+
+- **`DELETE /`**
+  - **Description**: Deletes a specific password entry.
+  - **Body**: JSON object containing the `id` of the entry to delete.
+  - **Response**: `{ success: true, result: [...] }`
+
 ## Component Hierarchy
 - `App` (Root Component)
   - `Navbar` (Application Navigation)
