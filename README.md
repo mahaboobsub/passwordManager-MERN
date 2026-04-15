@@ -1,74 +1,126 @@
+# PassOP - Your Own Password Manager
+
 ![image](https://github.com/user-attachments/assets/ccba746e-9115-4a5d-86ec-9e3421eeee80)
-***PassOp - Your Own Password Manager***
+
 PassOp is a secure and user-friendly password management system built with the MERN stack. It helps users store and manage passwords efficiently, ensuring their data is safe and easily accessible.
 
-***Features***
-MERN Stack: Built using MongoDB, Express.js, React.js, and Node.js for a full-stack solution.
-React Toastify: Provides elegant toast notifications for better user interaction.
-TailwindCSS: Enhances the UI with modern, responsive design.
-Password Encryption: Stores passwords securely using encryption techniques.
-Search & Filter: Easily find stored passwords using a search bar.
-Copy to Clipboard: Quickly copy passwords with one click.
-Responsive Design: Fully optimized for mobile and desktop devices.
-Extra Weighted Features: Includes advanced security checks, password strength meter, and backup/export functionality.
+---
 
-***Installation and Setup***
-Install dependencies:
-Backend:
+## Tech Stack
+- **Frontend**: React.js, TailwindCSS, React Toastify, Vite
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (accessed via native mongodb driver)
+- **Other Tools**: uuid (for unique ID generation on the frontend), lord-icon (for animated icons)
+
+## System Architecture
+The application follows a standard Client-Server architecture:
+- **Client**: A React Single Page Application (SPA) that provides the user interface for adding, editing, deleting, and copying passwords.
+- **Server**: An Express REST API that handles HTTP requests (GET, POST, DELETE) for managing password data.
+- **Database**: MongoDB handles the persistent storage of password entries.
+
+## Data Flow
+1. **Fetching Passwords**: On load, `Manager.jsx` calls `GET http://localhost:3000/`. The backend Express server queries the MongoDB database and returns all saved passwords as JSON.
+2. **Saving Passwords**: When a user fills the form and clicks "Save", a POST request is sent to the backend with the password data. The backend inserts the data into MongoDB.
+3. **Deleting Passwords**: When a user deletes a password, a DELETE request is sent with the target `id`. The backend deletes the corresponding document from the database.
+
+## Component Hierarchy
+- `App` (Root Component)
+  - `Navbar` (Application Navigation)
+  - `Manager` (Core Component containing the password form and the list table)
+    - Form Inputs (Site, Username, Password)
+    - Passwords Table (to display saved items)
+  - `Footer` (Application Footer)
+
+## Technical Design Decisions
+- **Decoupled Frontend and Backend**: Maintains a clean separation of concerns, allowing standalone scaling and easier maintenance.
+- **Local State Management**: Uses React hooks (`useState`, `useEffect`) directly in the `Manager` component as the state complexity is relatively low.
+- **Optimistic UI Updates**: In some cases, the Local State is updated concurrently with network calls, keeping the interface feeling snappy and responsive for the user.
+
+## Why Supabase? (Database Decision)
+**Note:** This actual project uses **MongoDB** as part of a classic MERN (MongoDB, Express, React, Node) stack rather than Supabase.
+- **Why MongoDB?** Document databases map extremely well natively to JavaScript and JSON, keeping the frontend structure identical to backend storage. The integration through `mongodb` allows for rapid iteration and simple querying for an application of this scale.
+
+## Why Gemini 2.0 Flash?
+**Note:** There is currently **no** Gemini 2.0 Flash or AI integration in the PassOp application. It focuses purely on secure and responsive password storage and retrieval.
+
+## Database Schema
+The MongoDB database contains a single collection named `passwords`.
+Each document follows this schema:
+- `id` (String): A Unique UUID generated on the frontend.
+- `site` (String): The URL or name of the site.
+- `username` (String): The user's login ID or username.
+- `password` (String): The user's password.
+
+## Template Engine
+This project does **not** rely on a server-side template engine (like EJS or Pug). It operates as a Single Page Application (SPA) using **React**, where the DOM is dynamically updated client-side by Vite and React's reconciliation engine.
+
+## AI Integration
+There is zero AI Integration in this application at this time. It functions via deterministic, explicit user operations without using Large Language Models or specialized AI inference.
+
+## Folder Structure
 ```
+passwordManager-MERN/
+├── backend/                  # Node/Express Backend Application
+│   ├── .env                  # Environment Variables for backend
+│   ├── server.js             # Main Express application and MongoDB connection
+│   └── package.json          # Backend dependencies
+├── src/                      # React Frontend Source Code
+│   ├── components/           # React Components
+│   │   ├── Footer.jsx        # Footer View
+│   │   ├── Manager.jsx       # Main Password Manager Logic and View
+│   │   └── Navbar.jsx        # Navigation Bar View
+│   ├── assets/               # Static assets
+│   ├── App.jsx               # Main React Application Component
+│   ├── main.jsx              # React Entry Point
+│   └── index.css / App.css   # Global Tailwind styles and custom CSS
+├── public/                   # Public static files (icons, SVGs)
+├── package.json              # Frontend workspace dependencies
+├── tailwind.config.js        # Tailwind CSS configuration
+└── vite.config.js            # Vite build configuration
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js installed
+- MongoDB connection string (Atlas or Local)
+
+### 1. Backend Setup
+Open a terminal and navigate to the backend directory:
+```bash
 cd backend
 npm install
-Frontend:
-
-cd ../frontend
-npm install
 ```
-
-***Set up environment variables:***
-
-In the backend directory, create a .env file:
-makefile
-````
+Create a `.env` file in the `backend` directory mapping to your database setup:
+```env
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-````
-***Start the application:***
+DB_NAME=your_database_name
 ```
-Backend:
-
-cd backend
-npm start
-Frontend:
-
-cd ../frontend
-npm start
+Start the backend server:
+```bash
+node server.js
 ```
-***Open the application in your browser:***
 
+### 2. Frontend Setup
+Open a new terminal window / tab.
+```bash
+# From the project root
+npm install
+npm run dev
 ```
-http://localhost:3000
-```
-***Technologies Used***
-***Frontend:***
 
-React.js
-React Toastify
-TailwindCSS
-***Backend:***
+### 3. Open Application
+Navigate to the provided localhost URL (typically `http://localhost:5173/` for Vite). Make sure the backend remains running at `http://localhost:3000/`.
 
-Node.js
-Express.js
-MongoDB
+## Environment Variables
+The application relies on the following environment variables:
 
+**Backend (`backend/.env`)**
+- `MONGO_URI`: The MongoDB connection string used to connect to your database cluster.
+- `DB_NAME`: The name of the specific database to be used (e.g., `passop`).
 
-****Future Enhancements***
-Integration with browser extensions.
-Multi-factor authentication (MFA).
-Dark mode support.
-Password sharing options.
-Contributing
-Feel free to contribute to this project by submitting issues or pull requests. Follow the contributing guidelines.
+(The frontend requires no specialized API keys for this baseline iteration given it points statically to localhost:3000).
 
-***License***
+---
+**License**
 This project is licensed under the MIT License.
-
